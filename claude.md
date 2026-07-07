@@ -20,9 +20,9 @@ Before opening a PR, the working tree must run clean: `pnpm build` succeeds, `pn
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║  BUILD PROGRESS                                 0/8 DONE  ║
-║  ░░░░░░░░░░░░░░░░░░░░░░░░░░  NOT STARTED                   ║
-║  Phase 0: Foundation, tooling & asset pipeline  [TODO]   ║
+║  BUILD PROGRESS                                 1/8 DONE  ║
+║  ███░░░░░░░░░░░░░░░░░░░░░░░  IN PROGRESS                   ║
+║  Phase 0: Foundation, tooling & asset pipeline  [DONE]   ║
 ║  Phase 1: Scroll spine (Lenis + GSAP + orchestr) [TODO]  ║
 ║  Phase 2: Hero — 3D depth + cursor mechanics     [TODO]  ║
 ║  Phase 3: Projects — Infinite Menu + detail view [TODO]  ║
@@ -33,8 +33,8 @@ Before opening a PR, the working tree must run clean: `pnpm build` succeeds, `pn
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-Phase: Not started.
-Status: Fresh repo. Update this block as each phase's exit criterion is met, exactly like Steward. Do not mark a phase DONE until its exit criterion is verified against a running dev server (or the live URL for Phase 7), not just "the code compiles."
+Phase: 0 complete (verified 2026-07-06 against dev server: 60fps empty scene, Draco GLB load/dispose clean, glmem 0/0 → 1/1 → 0/0). Next: Phase 1 scroll spine.
+Status: In progress. Update this block as each phase's exit criterion is met, exactly like Steward. Do not mark a phase DONE until its exit criterion is verified against a running dev server (or the live URL for Phase 7), not just "the code compiles."
 
 ---
 
