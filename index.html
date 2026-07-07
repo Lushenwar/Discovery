@@ -4,16 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Vitrine — Ryan Qi's interactive portfolio lab. An experiment in 3D, motion, and creative engineering." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600&family=Space+Grotesk:wght@700&display=swap"
-      rel="stylesheet"
-    />
     <title>Vitrine — Ryan Qi / the lab</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- static preloader shell: paints before React boots; the React Preloader
+           takes over with identical markup on first commit -->
+      <div class="fixed inset-0 z-50 flex items-center justify-center bg-ink">
+        <div class="flex flex-col items-center gap-3">
+          <span class="text-xs tracking-[0.3em] text-bone/60 uppercase">Vitrine</span>
+          <div class="h-px w-40 bg-bone/20"></div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

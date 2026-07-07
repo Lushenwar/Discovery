@@ -14,6 +14,8 @@
     "assets": "node scripts/optimize-assets.mjs"
   },
   "dependencies": {
+    "@fontsource/inter-tight": "^5.2.7",
+    "@fontsource/space-grotesk": "^5.2.10",
     "@react-three/drei": "^10.0.0",
     "@react-three/fiber": "^9.0.0",
     "@react-three/postprocessing": "^3.0.0",

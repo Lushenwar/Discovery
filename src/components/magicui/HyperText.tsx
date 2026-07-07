@@ -14,7 +14,12 @@ export function HyperText({
   className?: string;
   durationMs?: number;
 }) {
-  const [display, setDisplay] = useState(() => (prefersReducedMotion() ? text : ''));
+  // paint at full size immediately (LCP) — scramble is a transform, not a delay
+  const [display, setDisplay] = useState(() =>
+    prefersReducedMotion()
+      ? text
+      : text.replace(/[^ ]/g, () => CHARS[Math.floor(Math.random() * CHARS.length)]),
+  );
   const raf = useRef(0);
 
   useEffect(() => {

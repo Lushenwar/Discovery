@@ -17,12 +17,12 @@ export function CharReveal({ text, className = '' }: { text: string; className?:
     onUpdate: (p) => {
       const el = ref.current;
       if (!el || reduced) return;
-      const spans = el.children;
+      const spans = el.querySelectorAll<HTMLElement>('[aria-hidden]');
       const total = spans.length;
       for (let i = 0; i < total; i++) {
         // stagger by charIndex/total mapped onto section progress, soft edge
         const t = Math.min(Math.max((p * total - i) * 0.6 + 0.15, 0.12), 1);
-        (spans[i] as HTMLElement).style.opacity = String(t);
+        spans[i].style.opacity = String(t);
       }
     },
   });
@@ -30,7 +30,8 @@ export function CharReveal({ text, className = '' }: { text: string; className?:
   const chars = useMemo(() => text.split(''), [text]);
 
   return (
-    <p ref={ref} className={className} aria-label={text}>
+    <p ref={ref} className={className}>
+      <span className="sr-only">{text}</span>
       {chars.map((ch, i) => (
         <span key={i} aria-hidden="true" style={{ opacity: reduced ? 1 : 0.12 }}>
           {ch}
