@@ -22,7 +22,11 @@ export default function ThreeLayer({
     <Scene>
       {heroInView && <HeroDepth />}
       {showcase.inView && (
-        <ShowcaseModel model={showcaseModels[showcase.modelIndex]} orbitEl={showcase.orbitEl} />
+        <ShowcaseModel
+          model={showcaseModels[showcase.modelIndex]}
+          orbitEl={showcase.orbitEl}
+          progress={showcase.progress}
+        />
       )}
       {DEBUG && probeMounted && <SampleModelProbe />}
     </Scene>

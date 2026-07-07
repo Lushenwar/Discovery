@@ -1,7 +1,8 @@
 // Revives the old models.js intent (GLTFLoader + DRACO + environment + bloom
 // + orbit) as idiomatic r3f/drei.
-import { useEffect, useMemo } from 'react';
-import { useThree } from '@react-three/fiber';
+import { useEffect, useMemo, useRef, type RefObject } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
+import type { Group } from 'three';
 import { Environment, Lightformer, OrbitControls, useGLTF } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import { Box3, Sphere, Vector3 } from 'three';
@@ -13,12 +14,25 @@ import { prefersReducedMotion } from '../lib/reducedMotion';
 export function ShowcaseModel({
   model,
   orbitEl,
+  progress,
 }: {
   model: ShowcaseModelDef;
   orbitEl: HTMLElement | null;
+  progress: RefObject<number> | null;
 }) {
   const { scene } = useGLTF(model.file);
   const camera = useThree((s) => s.camera);
+  const groupRef = useRef<Group>(null);
+  const spin = useRef(0);
+
+  // the model shifts on its own as the page scrolls through the section,
+  // eased so it never binds 1:1 to raw scroll; orbit drag stays independent
+  useFrame((_, delta) => {
+    if (!groupRef.current || prefersReducedMotion()) return;
+    const target = (progress?.current ?? 0.5) * Math.PI * 1.2;
+    spin.current += (target - spin.current) * Math.min(delta * 3, 1);
+    groupRef.current.rotation.y = spin.current;
+  });
 
   // auto-fit: center on origin, normalize bounding sphere so every model
   // frames identically regardless of authored scale
@@ -45,8 +59,10 @@ export function ShowcaseModel({
 
   return (
     <>
-      <group scale={fit.scale} position={fit.offset.toArray()}>
-        <primitive object={scene} />
+      <group ref={groupRef}>
+        <group scale={fit.scale} position={fit.offset.toArray()}>
+          <primitive object={scene} />
+        </group>
       </group>
 
       {/* lightformer env — no runtime HDR downloads */}
@@ -61,8 +77,6 @@ export function ShowcaseModel({
         enabled={!!orbitEl}
         enableZoom={false}
         enablePan={false}
-        autoRotate={!prefersReducedMotion()}
-        autoRotateSpeed={0.6}
         target={new Vector3(...model.cameraFraming.target)}
         makeDefault
       />
