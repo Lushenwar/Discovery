@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
-import { Texture, type Group, type Mesh, type Material } from 'three';
+import type { Group } from 'three';
+import { disposeSceneGraph } from '../lib/dispose';
 
 const URL = '/models/duck.glb';
 
@@ -13,20 +14,7 @@ export function SampleModelProbe() {
 
   useEffect(() => {
     return () => {
-      scene.traverse((obj) => {
-        const mesh = obj as Mesh;
-        if (mesh.isMesh) {
-          mesh.geometry.dispose();
-          const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-          mats.forEach((m: Material) => {
-            // material.dispose() does NOT free its texture maps — walk them explicitly
-            Object.values(m).forEach((v) => {
-              if (v instanceof Texture) v.dispose();
-            });
-            m.dispose();
-          });
-        }
-      });
+      disposeSceneGraph(scene);
       useGLTF.clear(URL); // drop drei's cache so GPU memory actually returns
     };
   }, [scene]);

@@ -20,21 +20,21 @@ Before opening a PR, the working tree must run clean: `pnpm build` succeeds, `pn
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║  BUILD PROGRESS                                 4/8 DONE  ║
-║  █████████████░░░░░░░░░░░░░  IN PROGRESS                   ║
+║  BUILD PROGRESS                                 5/8 DONE  ║
+║  ████████████████░░░░░░░░░░  IN PROGRESS                   ║
 ║  Phase 0: Foundation, tooling & asset pipeline  [DONE]   ║
 ║  Phase 1: Scroll spine (Lenis + GSAP + orchestr) [DONE]  ║
 ║  Phase 2: Hero — 3D depth + cursor mechanics     [DONE]  ║
 ║  Phase 3: Projects — Infinite Menu + detail view [DONE]  ║
-║  Phase 4: 3D showcase (revive models.js → r3f)   [TODO]  ║
+║  Phase 4: 3D showcase (revive models.js → r3f)   [DONE]  ║
 ║  Phase 5: Interstitials & text mechanics         [TODO]  ║
 ║  Phase 6: Performance, mobile fallback, a11y     [TODO]  ║
 ║  Phase 7: Deploy & wire to main site             [TODO]  ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-Phase: 3 complete (React Bits Infinite Menu copied in + destroy() teardown, real project data from Devpost — 5 verified projects with real awards/links, procedural placeholder thumbs pending screenshots, ProjectDetail panel, a11y list fallback, mount-on-approach; browser verification deferred to user). Next: Phase 4 showcase.
-Status: In progress. NOTE: media/thumbs are generated placeholders — replace with real screenshots; FixMyFeed 'finalist' claim on main site not shown on Devpost, so omitted here. Update this block as each phase's exit criterion is met, exactly like Steward. Do not mark a phase DONE until its exit criterion is verified against a running dev server (or the live URL for Phase 7), not just "the code compiles."
+Phase: 4 complete (3 Khronos CC0 GLBs through pipeline — helmet 432KB/lantern 265KB/engine 201KB, all ≤1.5MB; lightformer env with no runtime HDR fetches, quality-gated Bloom+Vignette, OrbitControls bound to section overlay only, auto-fit framing, dispose-on-switch via shared disposeSceneGraph; browser verification deferred to user). Next: Phase 5 interstitials.
+Status: In progress. NOTES: (1) project thumbs are generated placeholders — replace with real screenshots; (2) FixMyFeed 'finalist' claim not on Devpost, omitted; (3) showcase models are CC0 samples flagged for replacement with Ryan's own. Update this block as each phase's exit criterion is met, exactly like Steward. Do not mark a phase DONE until its exit criterion is verified against a running dev server (or the live URL for Phase 7), not just "the code compiles."
 
 ---
 
