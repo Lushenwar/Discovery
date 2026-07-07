@@ -1,3 +1,5 @@
+import { Magnet } from '../components/reactbits/Magnet';
+
 const MAIN_SITE = 'https://ryanqiportfolio.vercel.app';
 
 /**
@@ -13,13 +15,15 @@ export function Outro() {
         head back to the main site.
       </p>
 
-      <a
-        href={MAIN_SITE}
-        className="group border border-bone/40 px-8 py-4 font-display text-lg tracking-tight transition-colors hover:bg-bone hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-bone"
-      >
-        ryanqiportfolio.vercel.app
-        <span className="ml-2 inline-block transition-transform group-hover:translate-x-1">→</span>
-      </a>
+      <Magnet strength={0.3}>
+        <a
+          href={MAIN_SITE}
+          className="group block border border-bone/40 px-8 py-4 font-display text-lg tracking-tight transition-colors hover:bg-bone hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-bone"
+        >
+          ryanqiportfolio.vercel.app
+          <span className="ml-2 inline-block transition-transform group-hover:translate-x-1">→</span>
+        </a>
+      </Magnet>
 
       <footer className="mt-16 flex gap-6 text-[11px] tracking-[0.25em] text-bone/55 uppercase">
         <span>Ryan Qi</span>

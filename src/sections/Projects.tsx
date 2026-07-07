@@ -1,9 +1,10 @@
-import { lazy, Suspense, useMemo, useState } from 'react';
+import { lazy, Suspense, useMemo, useRef, useState } from 'react';
 import { projects, type Project } from '../content/projects';
 import { placeholderThumb } from '../lib/thumbs';
 import { useScrollProgress } from '../scroll/useScrollProgress';
 import { emitSectionEvent } from '../scroll/debugBus';
 import { quality } from '../three/quality';
+import { prefersReducedMotion } from '../lib/reducedMotion';
 import { DEBUG } from '../lib/env';
 import type { MenuItem } from '../components/InfiniteMenu';
 
@@ -17,12 +18,19 @@ const InfiniteMenu = lazy(() => import('../components/InfiniteMenu'));
  */
 export function Projects({ onSelect }: { onSelect: (p: Project) => void }) {
   const [nearView, setNearView] = useState(false);
+  const nudgeRef = useRef<((amount: number) => void) | null>(null);
+  const lastProgress = useRef(0);
 
   // pre-roll: mount ~half a viewport before entry, unmount ~1 viewport after exit
   // (150% not 200% — the 80vh interstitial above would put 200% inside the initial view)
   const { ref } = useScrollProgress<HTMLElement>({
     start: 'top 150%',
     end: 'bottom -100%',
+    onUpdate: (p) => {
+      // sphere shifts on its own with scroll, then the snap re-settles it
+      if (!prefersReducedMotion()) nudgeRef.current?.((p - lastProgress.current) * 2.5);
+      lastProgress.current = p;
+    },
     onEnter: () => {
       setNearView(true);
       if (DEBUG) emitSectionEvent('projects', 'enter');
@@ -59,7 +67,7 @@ export function Projects({ onSelect }: { onSelect: (p: Project) => void }) {
         <div className="relative h-screen">
           {nearView && (
             <Suspense fallback={null}>
-              <InfiniteMenu items={items} onSelect={handleMenuSelect} />
+              <InfiniteMenu items={items} onSelect={handleMenuSelect} nudgeRef={nudgeRef} />
             </Suspense>
           )}
           <p className="pointer-events-none absolute top-10 left-1/2 -translate-x-1/2 text-[11px] tracking-[0.3em] text-bone/55 uppercase">

@@ -1,14 +1,17 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, type RefObject } from 'react';
 import { showcaseModels } from '../content/models';
 import { useScrollProgress } from '../scroll/useScrollProgress';
 import { emitSectionEvent } from '../scroll/debugBus';
 import { quality } from '../three/quality';
+import { Magnet } from '../components/reactbits/Magnet';
 import { DEBUG } from '../lib/env';
 
 export interface ShowcaseState {
   inView: boolean;
   modelIndex: number;
   orbitEl: HTMLElement | null;
+  /** live section progress (0→1) so the model shifts on its own with scroll */
+  progress: RefObject<number> | null;
 }
 
 /**
@@ -23,10 +26,10 @@ export function Showcase({ onChange }: { onChange: (s: ShowcaseState) => void })
 
   const report = (inView: boolean, index = modelIndex) => {
     inViewRef.current = inView;
-    onChange({ inView, modelIndex: index, orbitEl: orbitRef.current });
+    onChange({ inView, modelIndex: index, orbitEl: orbitRef.current, progress });
   };
 
-  const { ref } = useScrollProgress<HTMLElement>({
+  const { ref, progress } = useScrollProgress<HTMLElement>({
     start: 'top 150%',
     end: 'bottom -50%',
     onEnter: () => {
@@ -79,22 +82,26 @@ export function Showcase({ onChange }: { onChange: (s: ShowcaseState) => void })
             </p>
           </div>
           <div className="pointer-events-auto flex gap-2" role="group" aria-label="Switch model">
-            <button
-              type="button"
-              onClick={() => switchModel(-1)}
-              aria-label="Previous model"
-              className="grid h-11 w-11 place-items-center border border-bone/30 hover:bg-bone hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-bone"
-            >
-              ‹
-            </button>
-            <button
-              type="button"
-              onClick={() => switchModel(1)}
-              aria-label="Next model"
-              className="grid h-11 w-11 place-items-center border border-bone/30 hover:bg-bone hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-bone"
-            >
-              ›
-            </button>
+            <Magnet strength={0.4}>
+              <button
+                type="button"
+                onClick={() => switchModel(-1)}
+                aria-label="Previous model"
+                className="grid h-11 w-11 place-items-center border border-bone/30 hover:bg-bone hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-bone"
+              >
+                ‹
+              </button>
+            </Magnet>
+            <Magnet strength={0.4}>
+              <button
+                type="button"
+                onClick={() => switchModel(1)}
+                aria-label="Next model"
+                className="grid h-11 w-11 place-items-center border border-bone/30 hover:bg-bone hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-bone"
+              >
+                ›
+              </button>
+            </Magnet>
           </div>
         </div>
       </div>

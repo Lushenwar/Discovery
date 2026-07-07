@@ -8,6 +8,9 @@ import { Projects } from './sections/Projects';
 import { Showcase, type ShowcaseState } from './sections/Showcase';
 import { Interstitial } from './sections/Interstitial';
 import { TextReveal } from './components/magicui/TextReveal';
+import { ScrollVelocity } from './components/reactbits/ScrollVelocity';
+import { ClickSpark } from './components/reactbits/ClickSpark';
+import { Noise } from './components/reactbits/Noise';
 import { Outro } from './sections/Outro';
 import { quality } from './three/quality';
 import { DEBUG } from './lib/env';
@@ -34,6 +37,7 @@ export default function App() {
     inView: false,
     modelIndex: 0,
     orbitEl: null,
+    progress: null,
   });
 
   // three.js loads after first paint: desktop at idle, touch only when a 3D
@@ -70,6 +74,7 @@ export default function App() {
         <Hero onInView={setHeroInView} />
         <Interstitial text="One scroll value. One RAF. Sixty frames. Every mechanic on this page is hand-built and budgeted — the restraint lives on the main site; this is where the craft shows off." />
         <Projects onSelect={openProject} />
+        <ScrollVelocity text="Real WebGL — hand-built — sixty frames" />
         <Showcase onChange={setShowcase} />
         <TextReveal
           text="Built to be inspected."
@@ -84,6 +89,8 @@ export default function App() {
         </Suspense>
       )}
 
+      <Noise />
+      <ClickSpark />
       <Cursor />
 
       {DEBUG && (

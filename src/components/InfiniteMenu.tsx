@@ -777,6 +777,17 @@ class InfiniteGridMenu {
   }
 
   /**
+   * Vitrine addition: rotate the sphere from scroll so it shifts on its own
+   * as the page moves; the snap logic re-settles it on a face afterwards.
+   */
+  public nudge(amount: number): void {
+    if (this.control.isPointerDown) return;
+    const rot = quat.setAxisAngle(quat.create(), [0, 1, 0], amount);
+    quat.multiply(this.control.orientation, rot, this.control.orientation);
+    quat.normalize(this.control.orientation, this.control.orientation);
+  }
+
+  /**
    * Vitrine addition: stop the loop, drop listeners, and delete GL resources.
    * Deliberately does NOT loseContext(): StrictMode remounts reuse the same
    * canvas, and getContext() would hand the next instance a dead context.
@@ -1087,9 +1098,11 @@ interface InfiniteMenuProps {
   items: MenuItem[];
   scale?: number;
   onSelect: (item: MenuItem) => void;
+  /** Vitrine: receives a rotate-by-radians function so scroll can spin the sphere. */
+  nudgeRef?: MutableRefObject<((amount: number) => void) | null>;
 }
 
-const InfiniteMenu: FC<InfiniteMenuProps> = ({ items, scale = 1.0, onSelect }) => {
+const InfiniteMenu: FC<InfiniteMenuProps> = ({ items, scale = 1.0, onSelect, nudgeRef }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null) as MutableRefObject<HTMLCanvasElement | null>;
   const [activeItem, setActiveItem] = useState<MenuItem | null>(null);
   const [isMoving, setIsMoving] = useState<boolean>(false);
@@ -1106,6 +1119,7 @@ const InfiniteMenu: FC<InfiniteMenuProps> = ({ items, scale = 1.0, onSelect }) =
 
     if (canvas && items.length) {
       sketch = new InfiniteGridMenu(canvas, items, handleActiveItem, setIsMoving, sk => sk.run(), scale);
+      if (nudgeRef) nudgeRef.current = (amount) => sketch?.nudge(amount);
     }
 
     const handleResize = () => {
@@ -1119,9 +1133,10 @@ const InfiniteMenu: FC<InfiniteMenuProps> = ({ items, scale = 1.0, onSelect }) =
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      if (nudgeRef) nudgeRef.current = null;
       sketch?.destroy();
     };
-  }, [items, scale]);
+  }, [items, scale, nudgeRef]);
 
   const overlayVisibility = isMoving
     ? 'opacity-0 pointer-events-none duration-100'
