@@ -1,8 +1,11 @@
 // The single source for the reduced-motion decision. Everything imports from here.
 const query = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+// ?reduce forces the reduced path so it can be exercised without flipping OS settings
+const forced = new URLSearchParams(window.location.search).has('reduce');
+
 export function prefersReducedMotion(): boolean {
-  return query.matches;
+  return forced || query.matches;
 }
 
 export function onReducedMotionChange(cb: (reduced: boolean) => void): () => void {

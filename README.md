@@ -29,6 +29,19 @@ Equivalent manual command: `pnpm exec gltf-transform optimize in.glb out.glb --c
 Section textures ship as KTX2 (Basis). Encoding requires the `toktx` binary from [KTX-Software](https://github.com/KhronosGroup/KTX-Software/releases):
 `toktx --genmipmap --bcmp out.ktx2 in.png`. Draco/Basis decoders load from drei's default CDN at runtime.
 
+## Deploy (Vercel, static)
+
+```sh
+pnpm build          # outputs dist/
+npx vercel deploy --prod   # or connect the repo in the Vercel dashboard (framework: Vite)
+```
+
+`vercel.json` sets immutable caching for hashed `/assets/*` and week-long caching for `/models/*.glb`.
+After the first deploy: (1) set the final domain (`lab.ryanqi…` subdomain or a `/lab` rewrite from the
+main site — owner's call), (2) update the `og:image` URLs in `index.html` to the absolute domain,
+(3) add the cross-link on the main portfolio ("Vitrine — interactive portfolio experiment"), and
+(4) verify on a real phone, not just devtools emulation. Share image regenerates with `node scripts/make-og.mjs`.
+
 ## Workflow
 
 No direct commits to `main` (a pre-commit hook enforces this). Branch per phase: `git checkout -b <phase>/<slug>`, PR via `gh pr create`. Before any PR: `pnpm build` and `pnpm lint` clean, dev server renders without console errors.
