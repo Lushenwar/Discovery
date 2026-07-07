@@ -1,25 +1,32 @@
 import { useEffect, useState } from 'react';
-import { useProgress } from '@react-three/drei';
+
+// gate on fonts only, hard-capped — the hero text is the first beat and the
+// canvas streams in behind it, so nothing heavy holds first paint hostage
+const MAX_WAIT_MS = 800;
 
 /**
- * z-50 gate over everything until three.js loaders settle.
- * Fades out once progress hits 100 and holds a short minimum so it never flashes.
+ * z-50 gate until fonts settle (or the cap hits). Three-free on purpose —
+ * importing drei here would drag three.js back into the critical chunk.
  */
 export function Preloader() {
-  const { progress, active } = useProgress();
   const [done, setDone] = useState(false);
   const [gone, setGone] = useState(false);
+  const [progress, setProgress] = useState(8);
 
   useEffect(() => {
-    // key off `active`, not progress — with zero queued assets progress stays 0
-    if (active) return;
-    const t = setTimeout(() => setDone(true), 400); // min dwell, avoids a 1-frame flash
-    return () => clearTimeout(t);
-  }, [active, progress]);
+    document.fonts.ready.then(() => setDone(true));
+    const trickle = setInterval(() => setProgress((p) => Math.min(p + 9, 88)), 100);
+    const cap = setTimeout(() => setDone(true), MAX_WAIT_MS);
+    return () => {
+      clearInterval(trickle);
+      clearTimeout(cap);
+    };
+  }, []);
 
   useEffect(() => {
     if (!done) return;
-    const t = setTimeout(() => setGone(true), 700); // matches the CSS fade
+    setProgress(100);
+    const t = setTimeout(() => setGone(true), 500); // matches the CSS fade
     return () => clearTimeout(t);
   }, [done]);
 
@@ -27,7 +34,7 @@ export function Preloader() {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-ink transition-opacity duration-700 ${
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-ink transition-opacity duration-500 ${
         done ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
       aria-hidden={done}

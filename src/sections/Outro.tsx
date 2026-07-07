@@ -21,7 +21,7 @@ export function Outro() {
         <span className="ml-2 inline-block transition-transform group-hover:translate-x-1">→</span>
       </a>
 
-      <footer className="mt-16 flex gap-6 text-[11px] tracking-[0.25em] text-bone/30 uppercase">
+      <footer className="mt-16 flex gap-6 text-[11px] tracking-[0.25em] text-bone/55 uppercase">
         <span>Ryan Qi</span>
         <span>·</span>
         <span>Vitrine — the lab</span>
