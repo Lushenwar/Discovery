@@ -20,11 +20,11 @@ Before opening a PR, the working tree must run clean: `pnpm build` succeeds, `pn
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║  BUILD PROGRESS                                 2/8 DONE  ║
-║  ██████░░░░░░░░░░░░░░░░░░░░  IN PROGRESS                   ║
+║  BUILD PROGRESS                                 3/8 DONE  ║
+║  █████████░░░░░░░░░░░░░░░░░  IN PROGRESS                   ║
 ║  Phase 0: Foundation, tooling & asset pipeline  [DONE]   ║
 ║  Phase 1: Scroll spine (Lenis + GSAP + orchestr) [DONE]  ║
-║  Phase 2: Hero — 3D depth + cursor mechanics     [TODO]  ║
+║  Phase 2: Hero — 3D depth + cursor mechanics     [DONE]  ║
 ║  Phase 3: Projects — Infinite Menu + detail view [TODO]  ║
 ║  Phase 4: 3D showcase (revive models.js → r3f)   [TODO]  ║
 ║  Phase 5: Interstitials & text mechanics         [TODO]  ║
@@ -33,7 +33,7 @@ Before opening a PR, the working tree must run clean: `pnpm build` succeeds, `pn
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-Phase: 1 complete (verified 2026-07-07 against dev server: ?debug HUD prints smoothed progress, section enter/leave events fire in order, scrub labels animate, ?reduce → native scroll + static legible labels). Next: Phase 2 hero.
+Phase: 2 complete (build+lint clean; hero = particle slab + glow planes eased toward dead-zoned pointer, HyperText name, BlurFade subhead stagger, exclusion cursor on gsap.ticker; browser verification deferred to user per request 2026-07-07). Next: Phase 3 projects.
 Status: In progress. Update this block as each phase's exit criterion is met, exactly like Steward. Do not mark a phase DONE until its exit criterion is verified against a running dev server (or the live URL for Phase 7), not just "the code compiles."
 
 ---
