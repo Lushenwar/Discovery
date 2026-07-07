@@ -507,27 +507,38 @@ class ArcballControl {
   private readonly EPSILON = 0.1;
   private readonly IDENTITY_QUAT = quat.create();
 
+  // Vitrine: named handlers so dispose() can remove them — StrictMode remounts
+  // reuse the same canvas, and anonymous listeners would stack up
+  private onPointerDown = (e: PointerEvent) => {
+    vec2.set(this.pointerPos, e.clientX, e.clientY);
+    vec2.copy(this.previousPointerPos, this.pointerPos);
+    this.isPointerDown = true;
+  };
+  private onPointerUp = () => {
+    this.isPointerDown = false;
+  };
+  private onPointerMove = (e: PointerEvent) => {
+    if (this.isPointerDown) {
+      vec2.set(this.pointerPos, e.clientX, e.clientY);
+    }
+  };
+
   constructor(canvas: HTMLCanvasElement, updateCallback?: UpdateCallback) {
     this.canvas = canvas;
     this.updateCallback = updateCallback || (() => undefined);
 
-    canvas.addEventListener('pointerdown', (e: PointerEvent) => {
-      vec2.set(this.pointerPos, e.clientX, e.clientY);
-      vec2.copy(this.previousPointerPos, this.pointerPos);
-      this.isPointerDown = true;
-    });
-    canvas.addEventListener('pointerup', () => {
-      this.isPointerDown = false;
-    });
-    canvas.addEventListener('pointerleave', () => {
-      this.isPointerDown = false;
-    });
-    canvas.addEventListener('pointermove', (e: PointerEvent) => {
-      if (this.isPointerDown) {
-        vec2.set(this.pointerPos, e.clientX, e.clientY);
-      }
-    });
+    canvas.addEventListener('pointerdown', this.onPointerDown);
+    canvas.addEventListener('pointerup', this.onPointerUp);
+    canvas.addEventListener('pointerleave', this.onPointerUp);
+    canvas.addEventListener('pointermove', this.onPointerMove);
     canvas.style.touchAction = 'none';
+  }
+
+  public dispose(): void {
+    this.canvas.removeEventListener('pointerdown', this.onPointerDown);
+    this.canvas.removeEventListener('pointerup', this.onPointerUp);
+    this.canvas.removeEventListener('pointerleave', this.onPointerUp);
+    this.canvas.removeEventListener('pointermove', this.onPointerMove);
   }
 
   public update(deltaTime: number, targetFrameDuration = 16): void {
@@ -765,12 +776,21 @@ class InfiniteGridMenu {
     this.rafId = requestAnimationFrame(t => this.run(t));
   }
 
-  /** Vitrine addition: stop the loop and release the GL context on unmount. */
+  /**
+   * Vitrine addition: stop the loop, drop listeners, and delete GL resources.
+   * Deliberately does NOT loseContext(): StrictMode remounts reuse the same
+   * canvas, and getContext() would hand the next instance a dead context.
+   */
   public destroy(): void {
     this.destroyed = true;
     cancelAnimationFrame(this.rafId);
-    if (this.gl) {
-      this.gl.getExtension('WEBGL_lose_context')?.loseContext();
+    this.control?.dispose();
+    const gl = this.gl;
+    if (gl) {
+      if (this.tex) gl.deleteTexture(this.tex);
+      if (this.discProgram) gl.deleteProgram(this.discProgram);
+      if (this.discVAO) gl.deleteVertexArray(this.discVAO);
+      if (this.discInstances?.buffer) gl.deleteBuffer(this.discInstances.buffer);
       this.gl = null;
     }
   }
