@@ -20,10 +20,10 @@ Before opening a PR, the working tree must run clean: `pnpm build` succeeds, `pn
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║  BUILD PROGRESS                                 1/8 DONE  ║
-║  ███░░░░░░░░░░░░░░░░░░░░░░░  IN PROGRESS                   ║
+║  BUILD PROGRESS                                 2/8 DONE  ║
+║  ██████░░░░░░░░░░░░░░░░░░░░  IN PROGRESS                   ║
 ║  Phase 0: Foundation, tooling & asset pipeline  [DONE]   ║
-║  Phase 1: Scroll spine (Lenis + GSAP + orchestr) [TODO]  ║
+║  Phase 1: Scroll spine (Lenis + GSAP + orchestr) [DONE]  ║
 ║  Phase 2: Hero — 3D depth + cursor mechanics     [TODO]  ║
 ║  Phase 3: Projects — Infinite Menu + detail view [TODO]  ║
 ║  Phase 4: 3D showcase (revive models.js → r3f)   [TODO]  ║
@@ -33,7 +33,7 @@ Before opening a PR, the working tree must run clean: `pnpm build` succeeds, `pn
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-Phase: 0 complete (verified 2026-07-06 against dev server: 60fps empty scene, Draco GLB load/dispose clean, glmem 0/0 → 1/1 → 0/0). Next: Phase 1 scroll spine.
+Phase: 1 complete (verified 2026-07-07 against dev server: ?debug HUD prints smoothed progress, section enter/leave events fire in order, scrub labels animate, ?reduce → native scroll + static legible labels). Next: Phase 2 hero.
 Status: In progress. Update this block as each phase's exit criterion is met, exactly like Steward. Do not mark a phase DONE until its exit criterion is verified against a running dev server (or the live URL for Phase 7), not just "the code compiles."
 
 ---
