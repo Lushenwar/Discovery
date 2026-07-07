@@ -11,16 +11,12 @@ import { Projects } from './sections/Projects';
 import { ProjectDetail } from './sections/ProjectDetail';
 import { Showcase, type ShowcaseState } from './sections/Showcase';
 import { ShowcaseModel } from './three/ShowcaseModel';
-import { PlaceholderSection } from './sections/PlaceholderSection';
+import { Interstitial } from './sections/Interstitial';
+import { TextReveal } from './components/magicui/TextReveal';
+import { Outro } from './sections/Outro';
 import { showcaseModels } from './content/models';
 import { DEBUG } from './lib/env';
 import type { Project } from './content/projects';
-
-// Remaining placeholders — replaced phase by phase.
-const SECTIONS = [
-  { id: 'interstitial', label: 'Interstitial — coming in Phase 5' },
-  { id: 'outro', label: 'Outro — coming in Phase 5' },
-];
 
 export default function App() {
   const [probeMounted, setProbeMounted] = useState(false);
@@ -45,11 +41,14 @@ export default function App() {
 
       <main className="relative z-10">
         <Hero onInView={setHeroInView} />
+        <Interstitial text="One scroll value. One RAF. Sixty frames. Every mechanic on this page is hand-built and budgeted — the restraint lives on the main site; this is where the craft shows off." />
         <Projects onSelect={setSelectedProject} />
         <Showcase onChange={setShowcase} />
-        {SECTIONS.map((s) => (
-          <PlaceholderSection key={s.id} id={s.id} label={s.label} />
-        ))}
+        <TextReveal
+          text="Built to be inspected."
+          className="max-w-3xl text-center font-display text-4xl md:text-6xl leading-tight tracking-tight mix-blend-difference"
+        />
+        <Outro />
       </main>
 
       <ProjectDetail project={selectedProject} onClose={() => setSelectedProject(null)} />

@@ -20,20 +20,20 @@ Before opening a PR, the working tree must run clean: `pnpm build` succeeds, `pn
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║  BUILD PROGRESS                                 5/8 DONE  ║
-║  ████████████████░░░░░░░░░░  IN PROGRESS                   ║
+║  BUILD PROGRESS                                 6/8 DONE  ║
+║  ████████████████████░░░░░░  IN PROGRESS                   ║
 ║  Phase 0: Foundation, tooling & asset pipeline  [DONE]   ║
 ║  Phase 1: Scroll spine (Lenis + GSAP + orchestr) [DONE]  ║
 ║  Phase 2: Hero — 3D depth + cursor mechanics     [DONE]  ║
 ║  Phase 3: Projects — Infinite Menu + detail view [DONE]  ║
 ║  Phase 4: 3D showcase (revive models.js → r3f)   [DONE]  ║
-║  Phase 5: Interstitials & text mechanics         [TODO]  ║
+║  Phase 5: Interstitials & text mechanics         [DONE]  ║
 ║  Phase 6: Performance, mobile fallback, a11y     [TODO]  ║
 ║  Phase 7: Deploy & wire to main site             [TODO]  ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-Phase: 4 complete (3 Khronos CC0 GLBs through pipeline — helmet 432KB/lantern 265KB/engine 201KB, all ≤1.5MB; lightformer env with no runtime HDR fetches, quality-gated Bloom+Vignette, OrbitControls bound to section overlay only, auto-fit framing, dispose-on-switch via shared disposeSceneGraph; browser verification deferred to user). Next: Phase 5 interstitials.
+Phase: 5 complete (CharReveal per-character scroll reveal + TextReveal pinned word reveal, both on the single ScrollTrigger pipeline with direct DOM writes; mix-blend-difference legibility; Outro with main-site CTA; placeholders gone — full section rhythm in place). Next: Phase 6 perf/mobile/a11y.
 Status: In progress. NOTES: (1) project thumbs are generated placeholders — replace with real screenshots; (2) FixMyFeed 'finalist' claim not on Devpost, omitted; (3) showcase models are CC0 samples flagged for replacement with Ryan's own. Update this block as each phase's exit criterion is met, exactly like Steward. Do not mark a phase DONE until its exit criterion is verified against a running dev server (or the live URL for Phase 7), not just "the code compiles."
 
 ---
